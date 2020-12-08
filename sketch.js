@@ -4,14 +4,14 @@ const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var box1, pig1,pig3;
-var backgroundImg,platform;
+var box1, pig1, pig3;
+var backgroundImg, platform;
 var bird, slingshot;
 
 var gameState = "onSling";
 
 function preload() {
-    backgroundImg = loadImage("sprites/bg.png");
+    getTime();
 }
 
 function setup(){
@@ -45,7 +45,9 @@ function setup(){
 }
 
 function draw(){
-    background(backgroundImg);
+    if (backgroundImg) {
+            background(backgroundImg);
+    }
     Engine.update(engine);
     //strokeWeight(4);
     box1.display();
@@ -66,8 +68,25 @@ function draw(){
     bird.display();
     platform.display();
     //log6.display();
-    slingshot.display();    
+    slingshot.display();   
 }
+
+async function getTime() { 
+    var response = await fetch ("https://worldtimeapi.org/api/timezone/America/New_York");
+    var responseJson = await response.json();
+    console.log(responseJson.datetime.slice(11, 13));
+
+    var hr = responseJson.datetime.slice(11, 13);
+
+    if(hr > 5 && hr < 19){
+        bg = "sprites/bg.png"
+    }
+    else {
+        bg = "sprites/bg2.jpg"
+    }
+    backgroundImg = loadImage(bg);
+}
+
 
 function mouseDragged(){
     if (gameState!=="launched"){
